@@ -98,10 +98,10 @@ Owner: NJUPT-LY (刘烨)
 ## Confirmed Facts (not assumptions)
 - Real production domain: **`https://blog.liu-ye.workers.dev`**.
 - Git: branch-per-task + Conventional Commits; remote `origin` = `github.com/NJUPT-LY/blog.git`, default branch `main`.
-- Page language must be **`zh-CN`** (currently `en` — gap to fix).
+- Page language is **`zh-CN`**; all generated pages currently render `lang="zh-CN"`.
 - BlogCalendar sidebar + `?year=` filter are **permanent features**.
 - No test / lint / formatter tooling is configured.
-- As of onboarding, the working tree is **not clean** (6 modified + 8 untracked files, including a new `C-01.mdx` post and `BlogCalendar.astro`).
+- As of rehabilitation, `main` is clean; the pre-rehabilitation working-tree changes were preserved uncommitted on a separate `wip/pre-rehabilitation-20260718` branch/worktree.
 
 ## Unresolved Assumptions (verify before relying on them)
 - Whether Cloudflare **sessions / `SESSION` KV binding** are intentionally used or are dead config (build warns the adapter is unnecessary for a static site).

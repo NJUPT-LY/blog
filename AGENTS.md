@@ -21,7 +21,7 @@ There is **no lint, formatter, or test framework configured** (no eslint/prettie
 
 - **Content schema is enforced at build time.** Every file in `src/content/blog/**` must have `title` and `description` (both strings); `pubDate` is required and coerced from a string to a Date. Missing/!mismatched frontmatter fails `npm run build`. `updatedDate` and `heroImage` are optional. Schema lives in `src/content.config.ts:8`.
 - **Styling is hand-written CSS** (Bear Blog base) in `src/styles/global.css`. Tailwind v4 packages and the `@tailwindcss/vite` plugin are present in `astro.config.mjs`, but `global.css` does **not** import `"tailwindcss"` and no utility classes are used — Tailwind is installed but **not currently in actual use**. Do not add a legacy `tailwind.config.js`.
-- **`site` URL in `astro.config.mjs:12` is a placeholder (`https://example.com`).** It drives canonical URLs, sitemap, and RSS — set it to the real domain before deploying.
+- **`site` URL in `astro.config.mjs:12` must stay `https://blog.liu-ye.workers.dev`** (the former `https://example.com` placeholder must not be reintroduced). It drives canonical URLs, sitemap, and RSS.
 - **Site title/description are in `src/consts.ts`** (`SITE_TITLE`, `SITE_DESCRIPTION`), separate from the `site` URL. Both usually need updating together.
 - **Blog routing:** `src/pages/blog/[...slug].astro` renders all posts via `getStaticPaths()` + `getCollection('blog')` + `render()`. The route `slug` equals the post `id` (filename), so changing a filename changes the URL.
 - `wrangler.json` `main` points at `./dist/_worker.js/index.js`; `assets.directory` is `./dist`. These depend on a successful `astro build` first.

@@ -63,8 +63,7 @@ Owner: NJUPT-LY (刘烨)
 ## Current Baseline Gaps
 
 *This section records the project's current state as of onboarding and MUST be updated as the project progresses. It is not a permanent rule.*
-- `site` is still `https://example.com` (placeholder) — set to the real domain before any deploy.
-- Pages render `lang="en"` — must be switched to `lang="zh-CN"` (see Acceptance Criteria).
+- (resolved 2026-07-18) `site` is now `https://blog.liu-ye.workers.dev` and pages render `lang="zh-CN"`; no outstanding baseline gaps remain.
 
 ## Verification Commands (MUST run)
 - `npm run check` — full gate: `astro build && tsc && wrangler deploy --dry-run` (confirmed from `package.json`); needs `wrangler` CLI + network.

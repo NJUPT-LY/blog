@@ -23,18 +23,18 @@
     width: 52px;
     height: 58px;
     padding: 6px;
-    border: 1px solid rgb(var(--gray-light));
+    border: 1px solid var(--border-color);
     border-radius: 12px;
     color: rgb(var(--gray-dark));
-    background: white;
-    box-shadow: 0 3px 12px rgba(var(--black), 0.12);
+    background: var(--surface-color);
+    box-shadow: 0 3px 12px rgba(var(--shadow-color), 0.12);
     font: inherit;
     font-size: 12px;
     cursor: pointer;
     transition: color 0.15s, box-shadow 0.15s;
   }
   .back-to-top[hidden] { display: none; }
-  .back-to-top:hover { color: var(--accent); box-shadow: 0 4px 16px rgba(var(--black), 0.18); }
+  .back-to-top:hover { color: var(--accent); box-shadow: 0 4px 16px rgba(var(--shadow-color), 0.18); }
   .back-to-top:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
   @media (prefers-reduced-motion: reduce) { .back-to-top { transition: none; } }
 </style>

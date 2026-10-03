@@ -11,6 +11,11 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   site: "https://blog.liu-ye.workers.dev",
   integrations: [mdx(), sitemap()],
+  markdown: {
+    shikiConfig: {
+      themes: { light: "github-light", dark: "github-dark" },
+    },
+  },
 
   adapter: cloudflare({
     platformProxy: {

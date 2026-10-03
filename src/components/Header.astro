@@ -1,5 +1,6 @@
 ---
 import HeaderLink from './HeaderLink.astro';
+import ThemeToggle from './ThemeToggle.astro';
 import { SITE_TITLE } from '../consts';
 ---
 
@@ -7,10 +8,12 @@ import { SITE_TITLE } from '../consts';
 	<nav>
 		<h2><a href="/">{SITE_TITLE}</a></h2>
 		<div class="internal-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
+			<HeaderLink href="/">首页</HeaderLink>
+			<HeaderLink href="/blog">博客</HeaderLink>
+			<HeaderLink href="/about">关于</HeaderLink>
 		</div>
+		<div class="nav-actions">
+			<ThemeToggle />
 		<div class="social-links">
 			<!-- <a href="https://m.webtoo.ls/@astro" target="_blank">
 				<span class="sr-only">Follow Astro on Mastodon</span>
@@ -40,14 +43,15 @@ import { SITE_TITLE } from '../consts';
 				>
 			</a>
 		</div>
+		</div>
 	</nav>
 </header>
 <style>
 	header {
 		margin: 0;
 		padding: 0 1em;
-		background: white;
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
+		background: var(--surface-color);
+		box-shadow: 0 2px 8px rgba(var(--shadow-color), 10%);
 	}
 	h2 {
 		margin: 0;
@@ -62,8 +66,13 @@ import { SITE_TITLE } from '../consts';
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		gap: 0.5rem;
 	}
+	.internal-links, .nav-actions { display: flex; align-items: center; }
+	.nav-actions { gap: 0.75rem; }
+	h2 { flex-shrink: 0; }
 	nav a {
+		white-space: nowrap;
 		padding: 1em 0.5em;
 		color: rgb(var(--black));
 		border-bottom: 4px solid transparent;
@@ -78,8 +87,16 @@ import { SITE_TITLE } from '../consts';
 		display: flex;
 	}
 	@media (max-width: 720px) {
+		header { padding: 0 0.75rem; }
+		nav { gap: 0.25rem; }
+		nav a { padding: 1em 0.35em; }
+		h2 { font-size: 0.9em; }
 		.social-links {
 			display: none;
 		}
+	}
+	@media (max-width: 480px) {
+		.internal-links { font-size: 16px; }
+		nav a { padding-inline: 0.25em; }
 	}
 </style>

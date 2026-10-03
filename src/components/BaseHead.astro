@@ -2,6 +2,7 @@
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css';
+import themeScript from '../scripts/theme.js?raw';
 import { SITE_TITLE } from '../consts';
 
 interface Props {
@@ -19,6 +20,8 @@ const imageURL = new URL(image, canonicalURL);
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="theme-color" content="#ffffff" />
+<script is:inline set:html={themeScript} />
 <link rel="icon" type="image/svg+xml" href="/yifangjing.svg" />	<!-- 网站图标 -->
 <meta name="generator" content={Astro.generator} />
 

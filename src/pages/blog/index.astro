@@ -26,7 +26,7 @@ const posts = (await getCollection('blog')).sort(
 			.blog-list { scroll-margin-top: 1.5rem; }
 			.archive-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; }
 			#archive-summary { margin: 0 auto 0 0; font-weight: 600; }
-			.archive-controls button { font: inherit; font-size: 0.85rem; padding: 0.35rem 0.65rem; border: 1px solid rgb(var(--gray-light)); border-radius: 6px; background: white; color: rgb(var(--gray-dark)); cursor: pointer; }
+			.archive-controls button { font: inherit; font-size: 0.85rem; padding: 0.35rem 0.65rem; border: 1px solid var(--border-color); border-radius: 6px; background: var(--surface-color); color: var(--text-color); cursor: pointer; }
 			.archive-controls a { font-size: 0.85rem; }
 			h1 { font-size: 2rem; }
 			ul {

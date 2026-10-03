@@ -1,43 +1,27 @@
-# build output
+# 构建产物
 dist/
-# generated types
+# 框架生成的类型
 .astro/
 
-# dependencies
+# 依赖
 node_modules/
 
-# logs
+# 日志
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-
-# environment variables
+# 环境变量
 .env
 .env.production
 
-# macOS-specific files
+# macOS 系统文件
 .DS_Store
 
-# jetbrains setting folder
+# JetBrains 编辑器配置
 .idea/
 
-# wrangler files
+# Wrangler 本地文件
 .wrangler
 .dev.vars
-
-# local tooling and maintenance notes
-/.agents/
-/.codex/
-/.claude/
-/.opencode/
-/AGENTS.md
-/CLAUDE.md
-/docs/project-contract.md
-/docs/decisions/ADR-0001-onboarding-baseline.md
-/docs/failures/
-/docs/knowledge/
-/docs/superpowers/
-/docs/BLOG_CALENDAR_AUDIT_REPORT.md
-/evals/

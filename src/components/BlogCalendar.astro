@@ -1,0 +1,113 @@
+---
+import {
+  toDateKey, generateCalendarData, generateMonthSegments,
+  getColorLevel, countContributionsForYear,
+} from '../lib/calendar';
+
+interface Props {
+  dates: Date[];
+}
+
+const { dates } = Astro.props;
+const years = [...new Set(dates.map((date) => date.getUTCFullYear()))].sort((a, b) => b - a);
+const initialYear = years[0] ?? new Date().getUTCFullYear();
+const counts: Record<string, number> = {};
+for (const date of dates) {
+  const key = toDateKey(date);
+  counts[key] = (counts[key] ?? 0) + 1;
+}
+const weeks = generateCalendarData(initialYear);
+---
+
+<div class="github-calendar" id="github-calendar" data-initial-year={initialYear}>
+  <h2 id="calendar-heading">创作日历</h2>
+  <div id="year-controls" class="year-selector" hidden>
+    <label for="year">筛选年份</label>
+    <select id="year" name="year" aria-controls="post-list">
+      <option value="">全部年份</option>
+      {years.map((year) => <option value={year}>{year}</option>)}
+    </select>
+    <div class="year-buttons">
+      <button type="button" id="prev-year">上一有文章年份</button>
+      <button type="button" id="next-year">下一有文章年份</button>
+    </div>
+  </div>
+  <p id="calendar-summary">
+    {initialYear} 年 · {countContributionsForYear(counts, initialYear)} 篇文章
+  </p>
+  <div class="calendar-scroll" role="region" aria-label="全年创作日历，可横向滚动" tabindex="0">
+    <div class="calendar-layout" style={`--weeks: ${weeks.length}`}>
+      <div class="calendar-months" id="calendar-months" aria-hidden="true">
+        {generateMonthSegments(weeks).map((month) => (
+          <span style={`grid-column: span ${month.span}`}>{month.label}</span>
+        ))}
+      </div>
+      <div class="calendar-weekdays" aria-hidden="true">
+        {['一', '', '三', '', '五', '', '日'].map((label) => <span>{label}</span>)}
+      </div>
+      <div class="calendar-grid" id="calendar-grid">
+        {weeks.flat().map((date) => {
+          const key = date ? toDateKey(date) : '';
+          const count = counts[key] ?? 0;
+          const label = `${key}：${count} 篇文章`;
+          return <span class={`calendar-day level-${getColorLevel(count)}`}
+            data-date={key || undefined} data-count={date ? count : undefined}
+            title={date ? label : undefined} aria-label={date ? label : undefined}
+            aria-hidden={date ? undefined : 'true'} />;
+        })}
+      </div>
+    </div>
+  </div>
+  <p class="calendar-legend" aria-label="颜色越深，当天文章越多">
+    少 {[0, 1, 2, 3, 4].map((level) => <span class={`calendar-day level-${level}`} aria-hidden="true" />)} 多
+  </p>
+  <noscript><p>启用 JavaScript 后可按年份筛选；下方仍可阅读全部文章。</p></noscript>
+</div>
+
+<style is:global>
+  .github-calendar {
+    padding: 1rem;
+    border: 1px solid rgb(var(--gray-light));
+    border-radius: 12px;
+    background: white;
+    font-size: 14px;
+  }
+  .github-calendar h2 { font-size: 1.25rem; }
+  .github-calendar .year-selector:not([hidden]) { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+  .github-calendar select, .github-calendar button {
+    font: inherit;
+    padding: 0.4rem;
+    color: rgb(var(--black));
+    background: white;
+    border: 1px solid rgb(var(--gray-light));
+    border-radius: 4px;
+  }
+  .github-calendar .year-buttons { display: flex; gap: 0.4rem; }
+  .github-calendar button:not(:disabled) { cursor: pointer; }
+  .github-calendar button:disabled { opacity: 0.5; }
+  .github-calendar .calendar-scroll { overflow-x: auto; }
+  .github-calendar .calendar-layout {
+    display: grid;
+    grid-template-columns: 1rem max-content;
+    gap: 4px;
+    width: max-content;
+    padding: 4px;
+  }
+  .github-calendar .calendar-months, .github-calendar .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--weeks), 12px);
+    gap: 2px;
+    grid-column: 2;
+  }
+  .github-calendar .calendar-months { font-size: 10px; }
+  .github-calendar .calendar-grid { grid-template-rows: repeat(7, 12px); grid-auto-flow: column; }
+  .github-calendar .calendar-weekdays { display: grid; grid-template-rows: repeat(7, 12px); gap: 2px; font-size: 10px; line-height: 12px; }
+  .github-calendar .calendar-day { display: inline-block; width: 12px; height: 12px; border-radius: 2px; }
+  .github-calendar .calendar-grid [aria-hidden="true"] { visibility: hidden; }
+  .github-calendar .level-0 { background: #ebedf0; }
+  .github-calendar .level-1 { background: #9be9a8; }
+  .github-calendar .level-2 { background: #40c463; }
+  .github-calendar .level-3 { background: #30a14e; }
+  .github-calendar .level-4 { background: #216e39; }
+  .github-calendar .calendar-legend { display: flex; align-items: center; justify-content: flex-end; gap: 4px; margin-bottom: 0; }
+</style>

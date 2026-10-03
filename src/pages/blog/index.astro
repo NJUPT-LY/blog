@@ -5,6 +5,8 @@ import Footer from '../../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
+import BlogCalendar from '../../components/BlogCalendar.astro';
+import { toDateKey } from '../../lib/calendar';
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -14,11 +16,15 @@ const posts = (await getCollection('blog')).sort(
 <!doctype html>
 <html lang="zh-CN">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead title={`博客 | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 		<style>
 			main {
-				width: 960px;
+				width: 1200px;
 			}
+			.blog-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 2rem; align-items: start; }
+			.blog-list, .blog-sidebar { min-width: 0; }
+			.blog-sidebar { position: sticky; top: 1rem; }
+			h1 { font-size: 2rem; }
 			ul {
 				display: flex;
 				flex-wrap: wrap;
@@ -34,15 +40,15 @@ const posts = (await getCollection('blog')).sort(
 				text-decoration: none;
 				transition: 0.2s ease;
 			}
-			ul li:first-child {
+			ul li.featured {
 				width: 100%;
 				margin-bottom: 1rem;
 				text-align: center;
 			}
-			ul li:first-child img {
+			ul li.featured img {
 				width: 100%;
 			}
-			ul li:first-child .title {
+			ul li.featured .title {
 				font-size: 2.369rem;
 			}
 			ul li img {
@@ -61,12 +67,16 @@ const posts = (await getCollection('blog')).sort(
 				margin: 0;
 				color: rgb(var(--gray));
 			}
-			ul li a:hover h4,
+			ul li a:hover .title,
 			ul li a:hover .date {
-				color: rgb(var(--accent));
+				color: var(--accent);
 			}
 			ul a:hover img {
 				box-shadow: var(--box-shadow);
+			}
+			@media (max-width: 1024px) {
+				.blog-layout { grid-template-columns: minmax(0, 1fr); }
+				.blog-sidebar { position: static; grid-row: 1; }
 			}
 			@media (max-width: 720px) {
 				ul {
@@ -76,10 +86,10 @@ const posts = (await getCollection('blog')).sort(
 					width: 100%;
 					text-align: center;
 				}
-				ul li:first-child {
+				ul li.featured {
 					margin-bottom: 0;
 				}
-				ul li:first-child .title {
+				ul li.featured .title {
 					font-size: 1.563em;
 				}
 			}
@@ -87,15 +97,20 @@ const posts = (await getCollection('blog')).sort(
 	</head>
 	<body>
 		<Header />
-		<main>
-			<section>
-				<ul>
+		<main data-blog-archive>
+			<h1>博客归档</h1>
+			<div class="blog-layout">
+			<section class="blog-list" aria-label="文章列表">
+				<p id="archive-summary" role="status">全部文章 · {posts.length} 篇</p>
+				<a href="/blog/" data-all-years hidden>查看全部文章</a>
+				<p id="empty-posts" hidden={posts.length !== 0}>暂无文章。</p>
+				<ul id="post-list">
 					{
-						posts.map((post) => (
-							<li>
+						posts.map((post, index) => (
+							<li data-post-date={toDateKey(post.data.pubDate)} class:list={{ featured: index === 0 }}>
 								<a href={`/blog/${post.id}/`}>
-									<img width={720} height={360} src={post.data.heroImage} alt="" />
-									<h4 class="title">{post.data.title}</h4>
+									{post.data.heroImage && <img width={720} height={360} src={post.data.heroImage} alt="" />}
+									<h2 class="title">{post.data.title}</h2>
 									<p class="date">
 										<FormattedDate date={post.data.pubDate} />
 									</p>
@@ -105,7 +120,14 @@ const posts = (await getCollection('blog')).sort(
 					}
 				</ul>
 			</section>
+			<aside class="blog-sidebar" aria-labelledby="calendar-heading">
+				<BlogCalendar dates={posts.map((post) => post.data.pubDate)} />
+			</aside>
+			</div>
 		</main>
 		<Footer />
+		<script>
+			import '../../scripts/blog-archive';
+		</script>
 	</body>
 </html>

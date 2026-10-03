@@ -21,9 +21,13 @@ const posts = (await getCollection('blog')).sort(
 			main {
 				width: 1200px;
 			}
-			.blog-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 2rem; align-items: start; }
+			.blog-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.5rem; align-items: start; }
 			.blog-list, .blog-sidebar { min-width: 0; }
-			.blog-sidebar { position: sticky; top: 1rem; }
+			.blog-list { scroll-margin-top: 1.5rem; }
+			.archive-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; }
+			#archive-summary { margin: 0 auto 0 0; font-weight: 600; }
+			.archive-controls button { font: inherit; font-size: 0.85rem; padding: 0.35rem 0.65rem; border: 1px solid rgb(var(--gray-light)); border-radius: 6px; background: white; color: rgb(var(--gray-dark)); cursor: pointer; }
+			.archive-controls a { font-size: 0.85rem; }
 			h1 { font-size: 2rem; }
 			ul {
 				display: flex;
@@ -60,6 +64,7 @@ const posts = (await getCollection('blog')).sort(
 			}
 			.title {
 				margin: 0;
+				font-size: 1.563rem;
 				color: rgb(var(--black));
 				line-height: 1;
 			}
@@ -73,10 +78,6 @@ const posts = (await getCollection('blog')).sort(
 			}
 			ul a:hover img {
 				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 1024px) {
-				.blog-layout { grid-template-columns: minmax(0, 1fr); }
-				.blog-sidebar { position: static; grid-row: 1; }
 			}
 			@media (max-width: 720px) {
 				ul {
@@ -100,9 +101,15 @@ const posts = (await getCollection('blog')).sort(
 		<main data-blog-archive>
 			<h1>博客归档</h1>
 			<div class="blog-layout">
-			<section class="blog-list" aria-label="文章列表">
-				<p id="archive-summary" role="status">全部文章 · {posts.length} 篇</p>
-				<a href="/blog/" data-all-years hidden>查看全部文章</a>
+			<aside class="blog-sidebar" aria-labelledby="calendar-heading">
+				<BlogCalendar dates={posts.map((post) => post.data.pubDate)} />
+			</aside>
+			<section class="blog-list" id="post-results" tabindex="-1" aria-label="文章筛选结果">
+				<div class="archive-controls">
+					<p id="archive-summary" role="status">全部文章 · {posts.length} 篇</p>
+					<button type="button" data-clear-date hidden>清除日期筛选</button>
+					<a href="/blog/" data-all-years hidden>查看全部文章</a>
+				</div>
 				<p id="empty-posts" hidden={posts.length !== 0}>暂无文章。</p>
 				<ul id="post-list">
 					{
@@ -120,9 +127,6 @@ const posts = (await getCollection('blog')).sort(
 					}
 				</ul>
 			</section>
-			<aside class="blog-sidebar" aria-labelledby="calendar-heading">
-				<BlogCalendar dates={posts.map((post) => post.data.pubDate)} />
-			</aside>
 			</div>
 		</main>
 		<Footer />
